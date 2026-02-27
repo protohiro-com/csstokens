@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-npm install -g csstokens
+npm install -g @protohiro/csstokens
 ```
 
 ## Usage

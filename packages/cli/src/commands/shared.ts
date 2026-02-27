@@ -1,10 +1,10 @@
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
 import fg from 'fast-glob';
-import { SourceFile } from 'csstokens-core';
+import { SourceFile } from '@protohiro/csstokens-core';
 import { toPosix } from '../paths';
 
-import { TokenProfile } from 'csstokens-core';
+import { TokenProfile } from '@protohiro/csstokens-core';
 
 export interface CommonFlags {
   out: string;

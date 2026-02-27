@@ -1,6 +1,6 @@
 {
-  "name": "csstokens-core",
-  "version": "0.1.1",
+  "name": "@protohiro/csstokens-core",
+  "version": "0.1.0",
   "type": "module",
   "description": "Core extraction and token grouping engine for csstokens",
   "license": "MIT",

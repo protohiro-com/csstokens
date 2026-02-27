@@ -1,6 +1,6 @@
 {
-  "name": "csstokens",
-  "version": "0.1.1",
+  "name": "@protohiro/csstokens",
+  "version": "0.1.0",
   "type": "module",
   "description": "CLI to extract design tokens from existing frontend codebases",
   "license": "MIT",
@@ -47,7 +47,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "csstokens-core": "workspace:*",
+    "@protohiro/csstokens-core": "workspace:*",
     "commander": "^12.1.0",
     "fast-glob": "^3.3.2"
   },

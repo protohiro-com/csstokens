@@ -23,7 +23,7 @@ pnpm install
 ### Global CLI install
 
 ```bash
-npm install -g csstokens
+npm install -g @protohiro/csstokens
 csstokens --help
 ```
 
@@ -37,7 +37,7 @@ pnpm -r test
 ## CLI usage
 
 ```bash
-pnpm --filter csstokens build
+pnpm --filter @protohiro/csstokens build
 node packages/cli/dist/index.js --help
 ```
 

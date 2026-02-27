@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { extractFiles, rawIndexToJson } from 'csstokens-core';
+import { extractFiles, rawIndexToJson } from '@protohiro/csstokens-core';
 import { info } from '../logger';
 import { collectFiles, CommonFlags, writeText } from './shared';
 

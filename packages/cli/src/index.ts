@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import { TokenProfile } from 'csstokens-core';
+import { TokenProfile } from '@protohiro/csstokens-core';
 import {
   DEFAULT_EXCLUDE,
   DEFAULT_INCLUDE,

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
-import { TokenProfile } from 'csstokens-core';
+import { TokenProfile } from '@protohiro/csstokens-core';
 
 export const DEFAULT_OUT_DIR = './csstokens-out';
 export const DEFAULT_INCLUDE = ['**/*.{css,scss,tsx,ts,jsx,js}'];

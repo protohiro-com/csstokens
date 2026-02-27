@@ -1,0 +1,12 @@
+{
+  "profile": "balanced",
+  "sourceIgnorePatterns": [
+    "**/__snapshots__/**",
+    "**/examples/**",
+    "**/dist/**"
+  ],
+  "thresholds": {
+    "minCount": 2,
+    "minFileCount": 1
+  }
+}

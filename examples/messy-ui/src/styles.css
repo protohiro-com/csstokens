@@ -1,0 +1,23 @@
+:root {
+  --brand-main: #3366ff;
+  --space-sm: 8px;
+}
+
+.button {
+  color: #3366ff;
+  background: rgb(51, 102, 255);
+  padding: 8px 12px;
+  margin: 16px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+}
+
+.card {
+  color: hsl(220, 100%, 60%);
+  gap: 12px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}

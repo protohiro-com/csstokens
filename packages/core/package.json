@@ -1,0 +1,47 @@
+{
+  "name": "csstokens-core",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Core extraction and token grouping engine for csstokens",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": ["design-tokens", "tokens", "css", "cli", "extractor"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/protohiro-com/csstokens.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/protohiro-com/csstokens/issues"
+  },
+  "homepage": "https://github.com/protohiro-com/csstokens#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.7.6",
+    "fast-glob": "^3.3.2",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}

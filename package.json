@@ -1,0 +1,19 @@
+{
+  "name": "csstokens-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Extract design tokens from existing frontend codebases",
+  "packageManager": "pnpm@9.12.3",
+  "scripts": {
+    "build": "pnpm -r build",
+    "changeset": "changeset",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean",
+    "release": "changeset publish",
+    "release:check": "pnpm build && pnpm test",
+    "version-packages": "changeset version"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.28.1"
+  }
+}

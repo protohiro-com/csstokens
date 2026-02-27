@@ -1,0 +1,529 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`golden extract > matches snapshot for messy-ui fixture > raw-index.json 1`] = `
+"{
+  "entries": [
+    {
+      "confidence": 0.2,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 27,
+          "file": "src/App.tsx",
+          "line": 5,
+          "snippet": "'--local-color': '#3355ff',"
+        }
+      ],
+      "propertiesHint": [],
+      "type": "color",
+      "value": "#3355ff"
+    },
+    {
+      "confidence": 0.43,
+      "count": 3,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 17,
+          "file": "src/styles.css",
+          "line": 2,
+          "snippet": "--brand-main: #3366ff;"
+        },
+        {
+          "column": 10,
+          "file": "src/styles.css",
+          "line": 7,
+          "snippet": "color: #3366ff;"
+        },
+        {
+          "column": 15,
+          "file": "src/styles.css",
+          "line": 8,
+          "snippet": "background: rgb(51, 102, 255);"
+        }
+      ],
+      "propertiesHint": [
+        "background",
+        "color"
+      ],
+      "type": "color",
+      "value": "#3366ff"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 10,
+          "file": "src/styles.css",
+          "line": 19,
+          "snippet": "color: hsl(220, 100%, 60%);"
+        }
+      ],
+      "propertiesHint": [
+        "color"
+      ],
+      "type": "color",
+      "value": "#3377ff"
+    },
+    {
+      "confidence": 0.2,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 25,
+          "file": "src/styles.css",
+          "line": 22,
+          "snippet": "box-shadow: 0 1px 4px rgba(0,0,0,0.12);"
+        }
+      ],
+      "propertiesHint": [],
+      "type": "color",
+      "value": "rgba(0, 0, 0, 0.12)"
+    },
+    {
+      "confidence": 0.27,
+      "count": 2,
+      "fileCount": 2,
+      "occurrences": [
+        {
+          "column": 31,
+          "file": "src/App.tsx",
+          "line": 10,
+          "snippet": "boxShadow: '0 2px 8px rgba(0,0,0,0.2)',"
+        },
+        {
+          "column": 25,
+          "file": "src/styles.css",
+          "line": 12,
+          "snippet": "box-shadow: 0 2px 8px rgba(0,0,0,0.2);"
+        }
+      ],
+      "propertiesHint": [],
+      "type": "color",
+      "value": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "confidence": 0.16,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 3,
+          "file": "src/styles.css",
+          "line": 2,
+          "snippet": "--brand-main: #3366ff;"
+        }
+      ],
+      "propertiesHint": [],
+      "type": "css-var-def",
+      "value": "--brand-main"
+    },
+    {
+      "confidence": 0.16,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 9,
+          "file": "src/App.tsx",
+          "line": 5,
+          "snippet": "'--local-color': '#3355ff',"
+        }
+      ],
+      "propertiesHint": [],
+      "type": "css-var-def",
+      "value": "--local-color"
+    },
+    {
+      "confidence": 0.16,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 3,
+          "file": "src/styles.css",
+          "line": 3,
+          "snippet": "--space-sm: 8px;"
+        }
+      ],
+      "propertiesHint": [],
+      "type": "css-var-def",
+      "value": "--space-sm"
+    },
+    {
+      "confidence": 0.16,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 17,
+          "file": "src/App.tsx",
+          "line": 9,
+          "snippet": "color: 'var(--brand-main)',"
+        }
+      ],
+      "propertiesHint": [],
+      "type": "css-var-use",
+      "value": "--brand-main"
+    },
+    {
+      "confidence": 0.24,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 3,
+          "file": "src/styles.css",
+          "line": 15,
+          "snippet": "font-family: \\"Inter\\", sans-serif;"
+        }
+      ],
+      "propertiesHint": [
+        "font-family"
+      ],
+      "type": "font-family",
+      "value": "\\"Inter\\", sans-serif"
+    },
+    {
+      "confidence": 0.24,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 3,
+          "file": "src/styles.css",
+          "line": 14,
+          "snippet": "font-weight: 600;"
+        }
+      ],
+      "propertiesHint": [
+        "font-weight"
+      ],
+      "type": "font-weight",
+      "value": "600"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 31,
+          "file": "src/App.tsx",
+          "line": 13,
+          "snippet": "<h1 style={{ fontSize: '1.25rem', fontWeight: '700' }}>Hello</h1>"
+        }
+      ],
+      "propertiesHint": [
+        "font-size"
+      ],
+      "type": "length",
+      "value": "1.25rem"
+    },
+    {
+      "confidence": 0.35,
+      "count": 2,
+      "fileCount": 2,
+      "occurrences": [
+        {
+          "column": 24,
+          "file": "src/App.tsx",
+          "line": 8,
+          "snippet": "borderRadius: '10px',"
+        },
+        {
+          "column": 18,
+          "file": "src/styles.css",
+          "line": 21,
+          "snippet": "border-radius: 10px;"
+        }
+      ],
+      "propertiesHint": [
+        "border-radius"
+      ],
+      "type": "length",
+      "value": "10px"
+    },
+    {
+      "confidence": 0.4,
+      "count": 2,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 16,
+          "file": "src/styles.css",
+          "line": 9,
+          "snippet": "padding: 8px 12px;"
+        },
+        {
+          "column": 8,
+          "file": "src/styles.css",
+          "line": 20,
+          "snippet": "gap: 12px;"
+        }
+      ],
+      "propertiesHint": [
+        "gap",
+        "padding"
+      ],
+      "type": "length",
+      "value": "12px"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 14,
+          "file": "src/styles.css",
+          "line": 13,
+          "snippet": "font-size: 14px;"
+        }
+      ],
+      "propertiesHint": [
+        "font-size"
+      ],
+      "type": "length",
+      "value": "14px"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 11,
+          "file": "src/styles.css",
+          "line": 10,
+          "snippet": "margin: 16px;"
+        }
+      ],
+      "propertiesHint": [
+        "margin"
+      ],
+      "type": "length",
+      "value": "16px"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 19,
+          "file": "src/App.tsx",
+          "line": 6,
+          "snippet": "padding: '1rem',"
+        }
+      ],
+      "propertiesHint": [
+        "padding"
+      ],
+      "type": "length",
+      "value": "1rem"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 18,
+          "file": "src/styles.css",
+          "line": 11,
+          "snippet": "border-radius: 6px;"
+        }
+      ],
+      "propertiesHint": [
+        "border-radius"
+      ],
+      "type": "length",
+      "value": "6px"
+    },
+    {
+      "confidence": 0.43,
+      "count": 2,
+      "fileCount": 2,
+      "occurrences": [
+        {
+          "column": 18,
+          "file": "src/App.tsx",
+          "line": 7,
+          "snippet": "margin: '8px',"
+        },
+        {
+          "column": 12,
+          "file": "src/styles.css",
+          "line": 9,
+          "snippet": "padding: 8px 12px;"
+        }
+      ],
+      "propertiesHint": [
+        "margin",
+        "padding"
+      ],
+      "type": "length",
+      "value": "8px"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 3,
+          "file": "src/styles.css",
+          "line": 22,
+          "snippet": "box-shadow: 0 1px 4px rgba(0,0,0,0.12);"
+        }
+      ],
+      "propertiesHint": [
+        "box-shadow"
+      ],
+      "type": "shadow",
+      "value": "0 1px 4px rgba(0,0,0,0.12)"
+    },
+    {
+      "confidence": 0.28,
+      "count": 1,
+      "fileCount": 1,
+      "occurrences": [
+        {
+          "column": 3,
+          "file": "src/styles.css",
+          "line": 12,
+          "snippet": "box-shadow: 0 2px 8px rgba(0,0,0,0.2);"
+        }
+      ],
+      "propertiesHint": [
+        "box-shadow"
+      ],
+      "type": "shadow",
+      "value": "0 2px 8px rgba(0,0,0,0.2)"
+    }
+  ],
+  "filesAnalyzed": 2,
+  "filesIgnored": 0,
+  "filesScanned": 2
+}
+"
+`;
+
+exports[`golden extract > matches snapshot for messy-ui fixture > report.md 1`] = `
+"# csstokens report
+
+## Summary
+- Files scanned: 2
+- Files analyzed: 2
+- Files ignored by heuristics: 0
+- Entries: 21
+- Color values: 8
+- Length values: 11
+- Shadow values: 2
+- CSS var definitions: 3
+- CSS var usages: 1
+
+## Top 10 by type
+
+### color
+- \`#3366ff\` (count: 3, files: 1, confidence: 0.43)
+- \`#3377ff\` (count: 1, files: 1, confidence: 0.28)
+- \`rgba(0, 0, 0, 0.2)\` (count: 2, files: 2, confidence: 0.27)
+- \`#3355ff\` (count: 1, files: 1, confidence: 0.20)
+- \`rgba(0, 0, 0, 0.12)\` (count: 1, files: 1, confidence: 0.20)
+
+### length
+- \`8px\` (count: 2, files: 2, confidence: 0.43)
+- \`12px\` (count: 2, files: 1, confidence: 0.40)
+- \`10px\` (count: 2, files: 2, confidence: 0.35)
+- \`1.25rem\` (count: 1, files: 1, confidence: 0.28)
+- \`14px\` (count: 1, files: 1, confidence: 0.28)
+- \`16px\` (count: 1, files: 1, confidence: 0.28)
+- \`1rem\` (count: 1, files: 1, confidence: 0.28)
+- \`6px\` (count: 1, files: 1, confidence: 0.28)
+
+### shadow
+- \`0 1px 4px rgba(0,0,0,0.12)\` (count: 1, files: 1, confidence: 0.28)
+- \`0 2px 8px rgba(0,0,0,0.2)\` (count: 1, files: 1, confidence: 0.28)
+
+## Near-duplicate color clusters
+- #3355ff / #3366ff / #3377ff (combined count: 5)
+- rgba(0, 0, 0, 0.12) / rgba(0, 0, 0, 0.2) (combined count: 3)
+
+## Recommendations
+- Detected 5 unique normalized colors after source filtering.
+- Found 2 color clusters that look mergeable.
+
+## Token candidates
+- Color groups: 3
+- Space tokens: 2
+- Radius tokens: 2
+- Shadow tokens: 2
+- Font token sections: 3
+"
+`;
+
+exports[`golden extract > matches snapshot for messy-ui fixture > tokens.css 1`] = `
+":root {
+  --pt-color-primary-500: #3377ff;
+  --pt-color-surface-500: #3366ff;
+  --pt-color-text-500: rgba(0, 0, 0, 0.2);
+  --pt-font-family-0: "Inter", sans-serif;
+  --pt-font-size-0: 14px;
+  --pt-font-size-1: 1.25rem;
+  --pt-font-weight-600: 600;
+  --pt-radius-0: 6px;
+  --pt-radius-1: 10px;
+  --pt-shadow-1: 0 2px 8px rgba(0,0,0,0.2);
+  --pt-shadow-2: 0 1px 4px rgba(0,0,0,0.12);
+  --pt-space-0: 8px;
+  --pt-space-1: 12px;
+}
+"
+`;
+
+exports[`golden extract > matches snapshot for messy-ui fixture > tokens.json 1`] = `
+"{
+  "color": {
+    "primary": {
+      "500": "#3377ff"
+    },
+    "surface": {
+      "500": "#3366ff"
+    },
+    "text": {
+      "500": "rgba(0, 0, 0, 0.2)"
+    }
+  },
+  "font": {
+    "family": {
+      "0": "\\"Inter\\", sans-serif"
+    },
+    "size": {
+      "0": "14px",
+      "1": "1.25rem"
+    },
+    "weight": {
+      "600": "600"
+    }
+  },
+  "radius": {
+    "0": "6px",
+    "1": "10px"
+  },
+  "shadow": {
+    "1": "0 2px 8px rgba(0,0,0,0.2)",
+    "2": "0 1px 4px rgba(0,0,0,0.12)"
+  },
+  "space": {
+    "0": "8px",
+    "1": "12px"
+  }
+}
+"
+`;

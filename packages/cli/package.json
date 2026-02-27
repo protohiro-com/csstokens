@@ -1,6 +1,6 @@
 {
   "name": "csstokens",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "CLI to extract design tokens from existing frontend codebases",
   "license": "MIT",
@@ -15,11 +15,20 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "engines": {
     "node": ">=20"
   },
-  "keywords": ["design-tokens", "tokens", "css", "cli", "extractor"],
+  "keywords": [
+    "design-tokens",
+    "tokens",
+    "css",
+    "cli",
+    "extractor"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/protohiro-com/csstokens.git",

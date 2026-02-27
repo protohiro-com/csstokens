@@ -27,7 +27,14 @@
     "tokens",
     "css",
     "cli",
-    "extractor"
+    "extractor",
+    "css-variables",
+    "design-system",
+    "frontend",
+    "theming",
+    "token-extractor",
+    "style-tokens",
+    "typescript"
   ],
   "repository": {
     "type": "git",

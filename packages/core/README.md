@@ -1,6 +1,8 @@
 # @protohiro/csstokens-core
 
-`@protohiro/csstokens-core` contains the pure extraction, normalization, grouping and emitter logic used by the `csstokens` CLI.
+`@protohiro/csstokens-core` provides the extraction, normalization, grouping, and emitter logic behind the `csstokens` design token extractor.
+
+Use it when you need library access to design token extraction from existing frontend codebases.
 
 ## Install
 

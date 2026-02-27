@@ -1,8 +1,10 @@
 # csstokens
 
-`csstokens` is a small TypeScript CLI that scans frontend code and extracts design token candidates.
+`csstokens` is a TypeScript CLI to extract design tokens from existing CSS, SCSS, JS, JSX, TS, and TSX codebases.
 
-MVP output:
+It scans frontend repositories, finds repeated colors, spacing, shadows, and CSS variables, then generates deterministic token outputs for design system cleanup and migration work.
+
+Use it when you want to turn an existing codebase into:
 - `raw-index.json` with detected values and occurrences
 - `tokens.json`
 - `tokens.css`
@@ -78,7 +80,7 @@ Generates:
 - `--include <glob>` repeatable, default: `**/*.{css,scss,tsx,ts,jsx,js}`
 - `--exclude <glob>` repeatable, default: `**/node_modules/**`, `**/dist/**`, `**/build/**`, `**/.next/**`
 - `--prefix <string>` default: `pt`
-- `--format simple` only `simple` is supported in MVP
+- `--format simple` only `simple` is currently supported
 - `--profile <name>` `balanced` or `strict`
 - `--min-count <number>` override minimum count threshold for final token candidates
 - `--min-file-count <number>` override minimum file spread threshold for final token candidates
@@ -149,7 +151,7 @@ Example:
 - stable tie-breakers for naming/grouping
 - no timestamps/randomness in generated files
 
-## Heuristics in this MVP
+## Current heuristics
 
 - source filtering skips likely Storybook, generated, palette, and theme-dump files from token candidate ranking
 - each raw index entry gets a simple `confidence` score based on frequency, file spread, and property context
@@ -164,7 +166,7 @@ Example:
 - unit tests: spacing/radius sorting
 - golden snapshots: `tokens.json`, `tokens.css`, `report.md`, `raw-index.json`
 
-## Known limitations (MVP)
+## Known limitations
 
 - regex-based parsing; no full AST support
 - line/column detection is approximate in some complex TSX template cases

@@ -5,7 +5,7 @@ import { collectFiles, CommonFlags, writeText } from './shared';
 
 export async function runAnalyze(targetPath: string, flags: CommonFlags): Promise<void> {
   if (flags.format !== 'simple') {
-    throw new Error(`Unsupported format: ${flags.format}. Only 'simple' is available in MVP.`);
+    throw new Error(`Unsupported format: ${flags.format}. Only 'simple' is currently available.`);
   }
 
   const files = await collectFiles(targetPath, flags.include, flags.exclude);

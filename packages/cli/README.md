@@ -1,6 +1,8 @@
 # csstokens
 
-`csstokens` is a CLI that scans an existing frontend codebase and emits deterministic design token outputs.
+`csstokens` is a CLI to extract design tokens from existing CSS, SCSS, JS, JSX, TS, and TSX codebases.
+
+It scans frontend repositories and emits deterministic outputs for token migration, design system cleanup, and CSS variable standardization.
 
 ## Install
 

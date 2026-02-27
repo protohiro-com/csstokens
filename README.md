@@ -19,41 +19,27 @@ Use it when you want to turn an existing codebase into:
 ## Install
 
 ```bash
-pnpm install
-```
-
-### Global CLI install
-
-```bash
 npm install -g @protohiro/csstokens
 csstokens --help
-```
-
-## Build and test
-
-```bash
-pnpm -r build
-pnpm -r test
 ```
 
 ## CLI usage
 
 ```bash
-pnpm --filter @protohiro/csstokens build
-node packages/cli/dist/index.js --help
+csstokens --help
 ```
 
 ### Default extract from current folder
 
 ```bash
-node packages/cli/dist/index.js
-node packages/cli/dist/index.js --profile strict
+csstokens
+csstokens --profile strict
 ```
 
 ### Analyze
 
 ```bash
-node packages/cli/dist/index.js analyze ./examples/messy-ui
+csstokens analyze ./examples/messy-ui
 ```
 
 Generates:
@@ -63,8 +49,8 @@ Generates:
 ### Extract
 
 ```bash
-node packages/cli/dist/index.js extract ./examples/messy-ui --prefix pt
-node packages/cli/dist/index.js extract ./examples/messy-ui --profile strict
+csstokens extract ./examples/messy-ui --prefix pt
+csstokens extract ./examples/messy-ui --profile strict
 ```
 
 Generates:
@@ -87,6 +73,16 @@ Generates:
 - `--source-ignore <glob>` repeatable, ignore matched files for ranking/tokenization
 - `--config <path>` explicit config file path
 - `--dry-run` analyze and print summary without writing files
+
+## Development
+
+If you are working on the repository itself:
+
+```bash
+pnpm install
+pnpm -r build
+pnpm -r test
+```
 
 ## Repo config
 

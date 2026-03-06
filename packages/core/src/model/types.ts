@@ -48,6 +48,28 @@ export interface ExtractResult extends AnalyzeResult {
   tokensTs: string;
 }
 
+export interface RefactorSuggestion {
+  file: string;
+  line: number;
+  column: number;
+  type: 'color' | 'length' | 'shadow';
+  currentValue: string;
+  replacementValue: string;
+  tokenPath: string;
+  snippet: string;
+}
+
+export interface RefactorFilePlan {
+  file: string;
+  replacements: RefactorSuggestion[];
+}
+
+export interface RefactorPlan {
+  files: RefactorFilePlan[];
+  totalFiles: number;
+  totalReplacements: number;
+}
+
 export interface TokenTree {
   [key: string]: string | TokenTree;
 }

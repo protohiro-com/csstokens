@@ -10,6 +10,8 @@ Use it when you want to turn an existing codebase into:
 - `tokens.css`
 - `tokens.ts`
 - `report.md`
+- `refactor-plan.md`
+- `refactor-plan.json`
 
 ## Requirements
 
@@ -60,6 +62,19 @@ Generates:
 - `./csstokens-out/tokens.css`
 - `./csstokens-out/tokens.ts`
 
+### Refactor Dry Run
+
+```bash
+csstokens refactor ./examples/messy-ui --dry-run
+csstokens refactor ./examples/messy-ui --profile strict --prefix pt
+```
+
+With `--dry-run`, the CLI prints a summary of proposed replacements without writing files.
+
+Without `--dry-run`, it also generates:
+- `./csstokens-out/refactor-plan.md`
+- `./csstokens-out/refactor-plan.json`
+
 ## Flags
 
 - `--out <dir>` default: `./csstokens-out`
@@ -108,16 +123,18 @@ Example:
 ```md
 ## Summary
 - Files scanned: 2
+- Files analyzed: 2
+- Files matched by ranking ignore rules: 0
 - Entries: 20
-- Color values: 8
-- Length values: 9
-- Shadow values: 2
-- CSS var definitions: 3
-- CSS var usages: 1
+- Color occurrences: 8
+- Length occurrences: 9
+- Shadow occurrences: 2
+- CSS var definition occurrences: 3
+- CSS var usage occurrences: 1
 
 ## Recommendations
 - Detected 5 unique normalized colors.
-- Found 3 near-duplicate color pairs for possible merge.
+- Found 3 near-duplicate color clusters for possible merge.
 ```
 
 ## Example `tokens.css` fragment
@@ -155,6 +172,7 @@ Example:
 - near-duplicate colors are reported as mergeable clusters instead of an unbounded pair list
 - final color tokens are split into `text`, `surface`, `border`, `primary`, `accent`, and `status.*` candidates
 - `strict` profile emits a smaller token set with higher thresholds
+- `refactor` currently emits a dry-run replacement plan; it does not rewrite source files yet
 
 ## Tests
 
@@ -169,4 +187,4 @@ Example:
 - limited color parser (common hex/rgb/hsl forms only)
 - `box-shadow` detection focuses on direct `box-shadow: ...` declarations
 - typography extraction is heuristic (`font-size`, `font-weight`, `font-family`)
-- no automatic code refactor from literals to CSS vars/tokens
+- `refactor` suggests replacements but does not modify files automatically

@@ -16,6 +16,7 @@ interface ColorCandidate {
   lum: number;
   sat: number;
   hue: number;
+  roleScore: number;
 }
 
 interface GroupOptions {
@@ -204,8 +205,80 @@ function keywordScore(occurrences: Occurrence[], regex: RegExp): number {
   return score;
 }
 
-function inferColorRole(entry: RawIndexEntry): SemanticColorRole {
-  const scores = new Map<SemanticColorRole, number>([
+interface ColorSignals {
+  textHints: number;
+  surfaceHints: number;
+  borderHints: number;
+  brandKeywords: number;
+  successKeywords: number;
+  dangerKeywords: number;
+  warningKeywords: number;
+  infoKeywords: number;
+  textKeywords: number;
+  surfaceKeywords: number;
+  borderKeywords: number;
+}
+
+function collectColorSignals(entry: RawIndexEntry): ColorSignals {
+  const signals: ColorSignals = {
+    textHints: 0,
+    surfaceHints: 0,
+    borderHints: 0,
+    brandKeywords: 0,
+    successKeywords: 0,
+    dangerKeywords: 0,
+    warningKeywords: 0,
+    infoKeywords: 0,
+    textKeywords: 0,
+    surfaceKeywords: 0,
+    borderKeywords: 0,
+  };
+
+  for (const hint of entry.propertiesHint) {
+    if (TEXT_COLOR_HINTS.has(hint)) signals.textHints += 1;
+    if (SURFACE_COLOR_HINTS.has(hint)) signals.surfaceHints += 1;
+    if (BORDER_COLOR_HINTS.has(hint)) signals.borderHints += 1;
+  }
+
+  signals.brandKeywords = keywordScore(entry.occurrences, /\b(primary|brand|accent|logo|main|secondary)\b/);
+  signals.successKeywords = keywordScore(entry.occurrences, /\b(success|paid|complete|done|positive|approved)\b/);
+  signals.dangerKeywords = keywordScore(entry.occurrences, /\b(error|danger|failed|destructive|invalid|negative|critical|cancel)\b/);
+  signals.warningKeywords = keywordScore(entry.occurrences, /\b(warning|pending|alert|caution|draft)\b/);
+  signals.infoKeywords = keywordScore(entry.occurrences, /\b(info|notice|help|neutral|link)\b/);
+  signals.textKeywords = keywordScore(entry.occurrences, /\b(text|label|heading|title|subtitle|caption)\b/);
+  signals.surfaceKeywords = keywordScore(entry.occurrences, /\b(background|surface|card|modal|drawer|banner|panel|page|overlay)\b/);
+  signals.borderKeywords = keywordScore(entry.occurrences, /\b(border|divider|separator|outline|ring)\b/);
+
+  return signals;
+}
+
+function semanticHueMatch(role: Exclude<SemanticColorRole, 'text' | 'surface' | 'border' | 'brand'>, hue: number): boolean {
+  if (role === 'success') return hue >= 95 && hue <= 170;
+  if (role === 'danger') return hue <= 18 || hue >= 350;
+  if (role === 'warning') return hue >= 28 && hue <= 72;
+  return hue >= 185 && hue <= 250;
+}
+
+function inferColorRole(entry: RawIndexEntry): { role: SemanticColorRole; score: number } {
+  const rgba = normalizeColor(entry.value);
+  if (!rgba) return { role: 'brand', score: entry.confidence };
+
+  const saturation = rgbSaturation(rgba);
+  const luminance = rgbLuminance(rgba);
+  const hue = rgbHue(rgba);
+  const signals = collectColorSignals(entry);
+
+  if (rgba.a === 0) {
+    return { role: 'surface', score: 3 };
+  }
+
+  if (saturation < 0.08) {
+    if (luminance < 135) return { role: 'text', score: 3.5 };
+    if (luminance < 225) return { role: 'border', score: 3 };
+    return { role: 'surface', score: 3.5 };
+  }
+
+  const roleScores = new Map<SemanticColorRole, number>([
     ['brand', 0],
     ['text', 0],
     ['surface', 0],
@@ -216,68 +289,98 @@ function inferColorRole(entry: RawIndexEntry): SemanticColorRole {
     ['info', 0],
   ]);
 
-  for (const hint of entry.propertiesHint) {
-    if (TEXT_COLOR_HINTS.has(hint)) scores.set('text', scores.get('text')! + 3);
-    if (SURFACE_COLOR_HINTS.has(hint)) scores.set('surface', scores.get('surface')! + 3);
-    if (BORDER_COLOR_HINTS.has(hint)) scores.set('border', scores.get('border')! + 3);
+  roleScores.set(
+    'text',
+    signals.textHints * 3 +
+      signals.textKeywords * 1.5 +
+      (luminance < 150 ? 1.5 : 0) +
+      (saturation < 0.18 ? 0.75 : saturation < 0.28 ? 0 : -2),
+  );
+  roleScores.set(
+    'surface',
+    signals.surfaceHints * 3 +
+      signals.surfaceKeywords * 1.5 +
+      (luminance >= 214 ? 2 : luminance >= 190 ? 1 : -1.5) +
+      (saturation <= 0.18 ? 1.25 : saturation <= 0.35 ? 0.25 : -2),
+  );
+  roleScores.set(
+    'border',
+    signals.borderHints * 3 +
+      signals.borderKeywords * 1.5 +
+      (luminance >= 120 && luminance <= 235 ? 1.25 : -0.5) +
+      (saturation <= 0.2 ? 1 : saturation <= 0.3 ? 0 : -1.75),
+  );
+
+  const semanticBase = saturation >= 0.32 ? 1 : saturation >= 0.2 ? 0.25 : -2.5;
+  for (const role of ['success', 'danger', 'warning', 'info'] as const) {
+    const keywordWeight =
+      role === 'success'
+        ? signals.successKeywords
+        : role === 'danger'
+          ? signals.dangerKeywords
+          : role === 'warning'
+            ? signals.warningKeywords
+            : signals.infoKeywords;
+    const hueWeight = semanticHueMatch(role, hue) ? 1.5 : -1.5;
+    const lightPenalty = luminance > 236 ? -2 : luminance > 220 ? -1 : 0;
+    roleScores.set(role, semanticBase + keywordWeight * 2.25 + hueWeight + lightPenalty);
   }
 
-  scores.set('brand', scores.get('brand')! + keywordScore(entry.occurrences, /\b(primary|brand|accent|logo|main|secondary)\b/));
-  scores.set('success', scores.get('success')! + keywordScore(entry.occurrences, /\b(success|paid|complete|done|positive|approved|active)\b/));
-  scores.set('danger', scores.get('danger')! + keywordScore(entry.occurrences, /\b(error|danger|failed|destructive|invalid|negative|critical|cancel)\b/));
-  scores.set('warning', scores.get('warning')! + keywordScore(entry.occurrences, /\b(warning|pending|alert|caution|draft)\b/));
-  scores.set('info', scores.get('info')! + keywordScore(entry.occurrences, /\b(info|notice|help|neutral|link)\b/));
-  scores.set('text', scores.get('text')! + keywordScore(entry.occurrences, /\b(text|label|heading|title|subtitle|caption)\b/));
-  scores.set('surface', scores.get('surface')! + keywordScore(entry.occurrences, /\b(background|surface|card|modal|drawer|banner|panel|page|overlay)\b/));
-  scores.set('border', scores.get('border')! + keywordScore(entry.occurrences, /\b(border|divider|separator|outline|ring)\b/));
+  roleScores.set(
+    'brand',
+    signals.brandKeywords * 2.5 +
+      (saturation >= 0.3 ? 1.5 : saturation >= 0.2 ? 0.5 : -1.5) +
+      (luminance >= 50 && luminance <= 225 ? 0.75 : -0.5) +
+      (signals.surfaceHints > 0 && luminance > 220 ? -2 : 0),
+  );
 
-  const rgba = normalizeColor(entry.value);
-  if (!rgba) return 'brand';
-
-  const saturation = rgbSaturation(rgba);
-  const luminance = rgbLuminance(rgba);
-  const hue = rgbHue(rgba);
-
-  if (rgba.a === 0) {
-    return 'surface';
-  }
-
-  if (saturation < 0.1) {
-    if (luminance < 120) return 'text';
-    if (luminance < 220) return 'border';
-    return 'surface';
-  }
-
-  if ((hue >= 80 && hue <= 170) || scores.get('success')! > 0) {
-    if (scores.get('success')! >= scores.get('brand')!) return 'success';
-  }
-  if ((hue >= 0 && hue <= 20) || hue >= 345 || scores.get('danger')! > 0) {
-    if (scores.get('danger')! >= scores.get('brand')!) return 'danger';
-  }
-  if ((hue >= 25 && hue <= 75) || scores.get('warning')! > 0) {
-    if (scores.get('warning')! >= scores.get('brand')!) return 'warning';
-  }
-  if ((hue >= 180 && hue <= 255) || scores.get('info')! > 0) {
-    if (scores.get('info')! > scores.get('brand')!) return 'info';
-  }
-
-  const ordered = Array.from(scores.entries()).sort((a, b) => {
+  const ordered = Array.from(roleScores.entries()).sort((a, b) => {
     return stableCompare(b[1], a[1]) || stableCompare(a[0], b[0]);
   });
 
-  const topRole = ordered[0][1] > 0 ? ordered[0][0] : 'brand';
-  if ((topRole === 'text' || topRole === 'border') && saturation > 0.3 && luminance < 240) {
-    return 'brand';
+  const [bestRole, bestScore] = ordered[0];
+  const secondScore = ordered[1]?.[1] ?? Number.NEGATIVE_INFINITY;
+
+  if (bestRole === 'surface' && saturation > 0.35 && luminance < 214) {
+    return { role: 'brand', score: Math.max(bestScore - 0.25, 1) };
   }
-  if (topRole === 'surface' && luminance < 150 && saturation < 0.12) {
-    return 'text';
+
+  if (bestRole === 'text' && (saturation > 0.18 || luminance > 185)) {
+    return { role: 'brand', score: Math.max(roleScores.get('brand') ?? 0, 1) };
   }
-  return topRole;
+
+  if (bestRole === 'border' && saturation > 0.22) {
+    if (luminance > 210) {
+      return { role: 'surface', score: roleScores.get('surface') ?? bestScore };
+    }
+    return { role: 'brand', score: Math.max(roleScores.get('brand') ?? 0, 1) };
+  }
+
+  if (
+    (bestRole === 'success' || bestRole === 'danger' || bestRole === 'warning' || bestRole === 'info') &&
+    bestScore < 2.4
+  ) {
+    return { role: 'brand', score: roleScores.get('brand') ?? bestScore };
+  }
+
+  if (
+    bestRole === 'brand' &&
+    secondScore > bestScore - 0.4 &&
+    (ordered[1]?.[0] === 'surface' || ordered[1]?.[0] === 'text' || ordered[1]?.[0] === 'border')
+  ) {
+    return { role: ordered[1][0], score: ordered[1][1] };
+  }
+
+  return { role: bestRole, score: bestScore };
 }
 
 function prioritizeColor(entry: RawIndexEntry, options: GroupOptions): boolean {
   const rgba = normalizeColor(entry.value);
   if (!rgba || rgba.a === 0) {
+    return false;
+  }
+
+  if (rgba.a < 0.5) {
     return false;
   }
 
@@ -295,6 +398,7 @@ function prioritizeColor(entry: RawIndexEntry, options: GroupOptions): boolean {
 function sortCandidates(items: ColorCandidate[]): ColorCandidate[] {
   return items.sort((a, b) => {
     return (
+      stableCompare(b.roleScore, a.roleScore) ||
       stableCompare(b.entry.confidence, a.entry.confidence) ||
       b.entry.count - a.entry.count ||
       b.entry.fileCount - a.entry.fileCount ||
@@ -325,12 +429,16 @@ function choosePrimaryAccent(items: ColorCandidate[]): { primary: ColorCandidate
   }
 
   const ordered = sortCandidates([...items]);
-  const primaryPool = items.filter((item) => item.hue >= 185 && item.hue <= 250 && item.sat >= 0.2);
+  const primaryPool = items.filter(
+    (item) => item.hue >= 185 && item.hue <= 250 && item.sat >= 0.25 && item.lum >= 45 && item.lum <= 205,
+  );
   const primaryAnchor = (primaryPool.length > 0 ? primaryPool : ordered).sort((a, b) => {
     const aKeyword = brandBucketKeywordScore(a, /\b(primary|brand|main|logo)\b/);
     const bKeyword = brandBucketKeywordScore(b, /\b(primary|brand|main|logo)\b/);
     return (
       stableCompare(bKeyword, aKeyword) ||
+      stableCompare((b.hue >= 185 && b.hue <= 250) ? 0 : 1, (a.hue >= 185 && a.hue <= 250) ? 0 : 1) ||
+      stableCompare(b.roleScore, a.roleScore) ||
       stableCompare(b.entry.confidence, a.entry.confidence) ||
       b.entry.count - a.entry.count ||
       stableCompare(a.entry.value, b.entry.value)
@@ -346,7 +454,9 @@ function choosePrimaryAccent(items: ColorCandidate[]): { primary: ColorCandidate
       const bDistance = Math.abs(b.hue - primaryAnchor.hue);
       return (
         stableCompare(bKeyword, aKeyword) ||
+        stableCompare((b.hue < 185 || b.hue > 250) ? 0 : 1, (a.hue < 185 || a.hue > 250) ? 0 : 1) ||
         stableCompare(bDistance, aDistance) ||
+        stableCompare(b.roleScore, a.roleScore) ||
         stableCompare(b.entry.confidence, a.entry.confidence) ||
         stableCompare(a.entry.value, b.entry.value)
       );
@@ -365,11 +475,22 @@ function choosePrimaryAccent(items: ColorCandidate[]): { primary: ColorCandidate
     const accentKeyword = brandBucketKeywordScore(item, /\b(accent|secondary|highlight|marketing)\b/);
     const primaryDistance = Math.abs(item.hue - primaryAnchor.hue);
     const accentDistance = Math.abs(item.hue - accentAnchor.hue);
+    const matchesPrimaryHue = item.hue >= 185 && item.hue <= 250 && item.sat >= 0.25;
+    const matchesAccentHue = (item.hue < 185 || item.hue > 250) && item.sat >= 0.3;
+    const anchorIsBlueLed = primaryAnchor.hue >= 185 && primaryAnchor.hue <= 250;
 
-    if (accentKeyword > primaryKeyword) {
+    if (item.entry.value === primaryAnchor.entry.value) {
+      primary.push(item);
+    } else if (item.entry.value === accentAnchor.entry.value) {
+      accent.push(item);
+    } else if (anchorIsBlueLed && matchesAccentHue) {
+      accent.push(item);
+    } else if (accentKeyword > primaryKeyword) {
       accent.push(item);
     } else if (primaryKeyword > accentKeyword) {
       primary.push(item);
+    } else if (!matchesPrimaryHue && matchesAccentHue && primaryDistance > 24) {
+      accent.push(item);
     } else if (accentDistance + 12 < primaryDistance) {
       accent.push(item);
     } else {
@@ -401,12 +522,15 @@ function buildColorTokens(rawIndex: RawIndex, options: GroupOptions): TokenTree 
       }
     }
 
+    const inferred = inferColorRole(entry);
+
     candidates.push({
       entry,
-      role: inferColorRole(entry),
+      role: inferred.role,
       lum: luminance,
       sat: saturation,
       hue,
+      roleScore: inferred.score,
     });
   }
 

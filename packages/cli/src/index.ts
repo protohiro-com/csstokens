@@ -1,33 +1,15 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
-import { TokenProfile } from '@protohiro/csstokens-core';
 import {
-  DEFAULT_EXCLUDE,
-  DEFAULT_INCLUDE,
   DEFAULT_OUT_DIR,
-  DEFAULT_PROFILE,
-  loadRepoConfig,
 } from './config';
 import { runAnalyze } from './commands/analyze';
 import { runExtract } from './commands/extract';
-import { CommonFlags } from './commands/shared';
+import { runRefactor } from './commands/refactor';
 import { error } from './logger';
+import { Flags, resolveFlags } from './flags';
 
-interface Flags {
-  out: string;
-  include: string[];
-  exclude: string[];
-  sourceIgnore: string[];
-  prefix: string;
-  format: string;
-  dryRun: boolean;
-  profile?: TokenProfile;
-  config?: string;
-  minCount?: number;
-  minFileCount?: number;
-}
-
-const SUBCOMMANDS = new Set(['analyze', 'extract']);
+const SUBCOMMANDS = new Set(['analyze', 'extract', 'refactor']);
 const ROOT_ONLY_FLAGS = new Set(['help', '--help', '-h', 'version', '--version', '-V']);
 
 function collect(value: string, previous: string[]): string[] {
@@ -49,38 +31,6 @@ function applyCommonOptions(command: Command): Command {
     .option('--dry-run', 'analyze without writing files', false);
 }
 
-function normalizeProfile(profile: string | undefined): TokenProfile {
-  if (!profile) {
-    return DEFAULT_PROFILE;
-  }
-
-  if (profile === 'balanced' || profile === 'strict') {
-    return profile;
-  }
-
-  throw new Error(`Unsupported profile: ${profile}. Use 'balanced' or 'strict'.`);
-}
-
-async function resolveFlags(targetPath: string, flags: Flags): Promise<CommonFlags> {
-  const config = await loadRepoConfig(targetPath, flags.config);
-
-  return {
-    out: flags.out,
-    include: flags.include.length > 0 ? flags.include : config.include ?? [...DEFAULT_INCLUDE],
-    exclude: flags.exclude.length > 0 ? flags.exclude : config.exclude ?? [...DEFAULT_EXCLUDE],
-    sourceIgnorePatterns:
-      flags.sourceIgnore.length > 0
-        ? flags.sourceIgnore
-        : config.sourceIgnorePatterns ?? [],
-    prefix: flags.prefix,
-    format: flags.format,
-    dryRun: flags.dryRun,
-    profile: normalizeProfile(flags.profile ?? config.profile),
-    minCount: flags.minCount ?? config.thresholds?.minCount,
-    minFileCount: flags.minFileCount ?? config.thresholds?.minFileCount,
-  };
-}
-
 async function main(): Promise<void> {
   const program = new Command();
 
@@ -97,6 +47,11 @@ async function main(): Promise<void> {
   applyCommonOptions(program.command('extract [path]').description('Generate token files and report'))
     .action(async (targetPath = '.', flags: Flags) => {
       await runExtract(targetPath, await resolveFlags(targetPath, flags));
+    });
+
+  applyCommonOptions(program.command('refactor [path]').description('Generate a refactor dry run plan'))
+    .action(async (targetPath = '.', flags: Flags) => {
+      await runRefactor(targetPath, await resolveFlags(targetPath, flags));
     });
 
   const args = process.argv.slice(2);

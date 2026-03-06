@@ -123,13 +123,13 @@ export function emitReport(rawIndex: RawIndex, tokens?: TokenSet): string {
     '## Summary',
     `- Files scanned: ${rawIndex.filesScanned}`,
     `- Files analyzed: ${rawIndex.filesAnalyzed}`,
-    `- Files ignored by heuristics: ${rawIndex.filesIgnored}`,
+    `- Files matched by ranking ignore rules: ${rawIndex.filesIgnored}`,
     `- Entries: ${rawIndex.entries.length}`,
-    `- Color values: ${counts['color'] ?? 0}`,
-    `- Length values: ${counts['length'] ?? 0}`,
-    `- Shadow values: ${counts['shadow'] ?? 0}`,
-    `- CSS var definitions: ${counts['css-var-def'] ?? 0}`,
-    `- CSS var usages: ${counts['css-var-use'] ?? 0}`,
+    `- Color occurrences: ${counts['color'] ?? 0}`,
+    `- Length occurrences: ${counts['length'] ?? 0}`,
+    `- Shadow occurrences: ${counts['shadow'] ?? 0}`,
+    `- CSS var definition occurrences: ${counts['css-var-def'] ?? 0}`,
+    `- CSS var usage occurrences: ${counts['css-var-use'] ?? 0}`,
     '',
     '## Top 10 by type',
     '',
@@ -156,12 +156,12 @@ export function emitReport(rawIndex: RawIndex, tokens?: TokenSet): string {
   }
 
   lines.push('', '## Recommendations');
-  lines.push(`- Detected ${uniqueColors} unique normalized colors after source filtering.`);
+  lines.push(`- Detected ${uniqueColors} unique normalized colors in analyzed files.`);
   if (clusters.length > 0) {
     lines.push(`- Found ${clusters.length} color clusters that look mergeable.`);
   }
   if (rawIndex.filesIgnored > 0) {
-    lines.push('- Heuristic source filtering removed likely Storybook/generated/palette files from token candidate ranking.');
+    lines.push('- Ranking ignore rules affected token candidate selection, but raw analysis still includes those files.');
   }
   if (!tokens?.font) {
     lines.push('- Typography tokens were omitted or not detected in this run.');

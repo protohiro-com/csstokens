@@ -13,7 +13,14 @@ npm install @protohiro/csstokens-core
 ## Usage
 
 ```ts
-import { extractFiles } from '@protohiro/csstokens-core';
+import { buildRefactorPlan, extractFiles } from '@protohiro/csstokens-core';
 ```
 
 The package is intended for library use. For filesystem scanning and end-user commands, use `csstokens`.
+
+You can also build a dry-run replacement plan from extracted tokens and the raw index:
+
+```ts
+const result = extractFiles(files, { prefix: 'pt' });
+const plan = buildRefactorPlan(result.rawIndex, result.tokens, 'pt');
+```

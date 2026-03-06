@@ -117,6 +117,9 @@ const IGNORED_SOURCE_PATTERNS = [
   /(?:^|\/)themes\/colors\.[jt]sx?$/i,
 ];
 
+const STYLESHEET_FILE_PATTERN = /\.(?:css|scss)$/i;
+const LOOSE_COLOR_CONTEXT_PATTERN = /\b(?:color|background|border|fill|stroke|outline|shadow|theme|palette|accent|primary|secondary|success|danger|warning|info|surface|style|styles|sx|tw)\b/i;
+
 function camelToKebab(value: string): string {
   return value.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`).toLowerCase();
 }
@@ -270,6 +273,18 @@ function isInsideRange(index: number, ranges: Array<{ start: number; end: number
   return ranges.some((range) => index >= range.start && index < range.end);
 }
 
+function shouldKeepLooseColorHit(file: SourceFile, index: number): boolean {
+  if (STYLESHEET_FILE_PATTERN.test(file.path)) {
+    return true;
+  }
+
+  const start = Math.max(0, index - 80);
+  const end = Math.min(file.content.length, index + 80);
+  const context = file.content.slice(start, end);
+
+  return LOOSE_COLOR_CONTEXT_PATTERN.test(context);
+}
+
 function extractFromProperties(file: SourceFile): Hit[] {
   const hits: Hit[] = [];
   let match: RegExpExecArray | null;
@@ -372,6 +387,10 @@ export function extractFileHits(file: SourceFile): Hit[] {
       continue;
     }
 
+    if (!shouldKeepLooseColorHit(file, match.index)) {
+      continue;
+    }
+
     const normalized = toCanonicalColor(match[0]);
     if (normalized) {
       pushHit(hits, file, 'color', normalized, match.index);
@@ -414,7 +433,6 @@ export function buildRawIndex(
   for (const file of files) {
     if (shouldIgnoreSourceFile(file.path, sourceIgnorePatterns)) {
       filesIgnored += 1;
-      continue;
     }
 
     filesAnalyzed += 1;

@@ -420,13 +420,13 @@ exports[`golden extract > matches snapshot for messy-ui fixture > report.md 1`] 
 ## Summary
 - Files scanned: 2
 - Files analyzed: 2
-- Files ignored by heuristics: 0
+- Files matched by ranking ignore rules: 0
 - Entries: 21
-- Color values: 8
-- Length values: 11
-- Shadow values: 2
-- CSS var definitions: 3
-- CSS var usages: 1
+- Color occurrences: 8
+- Length occurrences: 11
+- Shadow occurrences: 2
+- CSS var definition occurrences: 3
+- CSS var usage occurrences: 1
 
 ## Top 10 by type
 
@@ -456,11 +456,11 @@ exports[`golden extract > matches snapshot for messy-ui fixture > report.md 1`] 
 - rgba(0, 0, 0, 0.12) / rgba(0, 0, 0, 0.2) (combined count: 3)
 
 ## Recommendations
-- Detected 5 unique normalized colors after source filtering.
+- Detected 5 unique normalized colors in analyzed files.
 - Found 2 color clusters that look mergeable.
 
 ## Token candidates
-- Color groups: 3
+- Color groups: 2
 - Space tokens: 2
 - Radius tokens: 2
 - Shadow tokens: 2
@@ -470,9 +470,8 @@ exports[`golden extract > matches snapshot for messy-ui fixture > report.md 1`] 
 
 exports[`golden extract > matches snapshot for messy-ui fixture > tokens.css 1`] = `
 ":root {
-  --pt-color-primary-500: #3377ff;
-  --pt-color-surface-500: #3366ff;
-  --pt-color-text-500: rgba(0, 0, 0, 0.2);
+  --pt-color-primary-500: #3366ff;
+  --pt-color-status-info-500: #3377ff;
   --pt-font-family-0: "Inter", sans-serif;
   --pt-font-size-0: 14px;
   --pt-font-size-1: 1.25rem;
@@ -491,13 +490,12 @@ exports[`golden extract > matches snapshot for messy-ui fixture > tokens.json 1`
 "{
   "color": {
     "primary": {
-      "500": "#3377ff"
-    },
-    "surface": {
       "500": "#3366ff"
     },
-    "text": {
-      "500": "rgba(0, 0, 0, 0.2)"
+    "status": {
+      "info": {
+        "500": "#3377ff"
+      }
     }
   },
   "font": {

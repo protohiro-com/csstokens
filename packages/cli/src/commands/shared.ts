@@ -32,14 +32,13 @@ export async function collectFiles(rootPath: string, include: string[], exclude:
 
   entries.sort();
 
-  const files: SourceFile[] = [];
-  for (const file of entries) {
-    const content = await fs.readFile(file, 'utf8');
-    const relative = toPosix(path.relative(cwd, file));
-    files.push({ path: relative, content });
-  }
-
-  return files;
+  return Promise.all(
+    entries.map(async (file) => {
+      const content = await fs.readFile(file, 'utf8');
+      const relative = toPosix(path.relative(cwd, file));
+      return { path: relative, content };
+    }),
+  );
 }
 
 export async function writeText(filePath: string, content: string): Promise<void> {
